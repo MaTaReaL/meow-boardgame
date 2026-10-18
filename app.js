@@ -740,6 +740,36 @@ function animateParticles() {
 }
 
 // =========================================================
+// SHARE QR CODE MODAL HELPERS
+// =========================================================
+function openShareQrModal() {
+  sfx.playChime();
+  const m = document.getElementById('shareQrModal');
+  if (m) m.classList.add('open');
+}
+
+function closeShareQrModal(e) {
+  if (e && e.target !== e.currentTarget && !e.target.classList.contains('modal-close')) return;
+  sfx.playTick(400, 0.04);
+  const m = document.getElementById('shareQrModal');
+  if (m) m.classList.remove('open');
+}
+
+function copySiteLink() {
+  sfx.playChime();
+  const url = 'https://matareal.github.io/meow-boardgame/';
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => {
+      alert('คัดลอกลิงก์สำเร็จแล้ว! ส่งต่อให้เพื่อนได้เลยครับ 🎉\n' + url);
+    }).catch(() => {
+      prompt('คัดลอกลิงก์ด้านล่างนี้ได้เลยครับ:', url);
+    });
+  } else {
+    prompt('คัดลอกลิงก์ด้านล่างนี้ได้เลยครับ:', url);
+  }
+}
+
+// =========================================================
 // INITIALIZE ON DOM READY
 // =========================================================
 window.addEventListener('DOMContentLoaded', () => {

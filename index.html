@@ -121,6 +121,9 @@
             <button class="btn-secondary" onclick="switchTopMode('flipbook')">
               📖 เปิดคู่มือ 3D (10 หน้า)
             </button>
+            <button class="btn-secondary" onclick="openShareQrModal()">
+              📱 สแกน QR ชวนเพื่อนเล่น
+            </button>
           </div>
         </div>
       </div>
@@ -696,6 +699,19 @@
             รองศาสตราจารย์ ดร.ศิวนิต อรรถวุฒิกุล
           </div>
         </div>
+
+        <div style="margin-top:24px; text-align:center; padding:20px; background:var(--panel-bg); border:2.5px solid var(--border-color); border-radius:18px; box-shadow:0 4px 0 var(--border-color);">
+          <div style="font-family:'Mali'; font-weight:700; font-size:1.15rem; color:var(--thai-red); margin-bottom:6px;">
+            📱 คิวอาร์โค้ดสำหรับแชร์ให้เพื่อนร่วมวง
+          </div>
+          <p style="font-size:0.88rem; color:var(--ink-muted); margin-bottom:14px;">
+            ให้ผู้เล่นคนอื่นใช้กล้องมือถือสแกน เพื่อเปิดกระดานจำลองและคู่มืออ่านพร้อมกันได้ทันที
+          </p>
+          <img src="assets/elements/qrcode_site.png" alt="QR Code" style="width:200px; height:200px; border-radius:14px; border:2px solid var(--border-color); background:#FFF; padding:6px; box-shadow:0 3px 0 var(--border-color); cursor:pointer;" onclick="openShareQrModal()" title="แตะเพื่อดูภาพขยาย">
+          <div style="margin-top:12px; font-family:'Mali'; font-weight:700; font-size:0.88rem; color:var(--thai-navy);">
+            🌐 https://matareal.github.io/meow-boardgame/
+          </div>
+        </div>
       </div>
     </section>
 
@@ -758,6 +774,26 @@
       <h3 id="modalTitle" style="font-size:1.5rem; color:var(--thai-red); margin:8px 0;"></h3>
       <p id="modalDesc" style="font-size:0.96rem; line-height:1.6; color:var(--ink-brown); margin-bottom:12px;"></p>
       <div id="modalUsage" class="lore-highlight-box" style="text-align:left;"></div>
+    </div>
+  </div>
+
+  <!-- Share QR Modal -->
+  <div id="shareQrModal" class="modal-backdrop" onclick="closeShareQrModal(event)">
+    <div class="modal-card" style="text-align:center; max-width:440px;">
+      <button class="modal-close" onclick="closeShareQrModal(event)">✕</button>
+      <div style="font-family:'Mali', cursive; font-weight:700; font-size:1.35rem; color:var(--thai-red); margin-bottom:6px;">
+        📱 สแกนเปิดเล่นบนมือถือ
+      </div>
+      <p style="font-size:0.88rem; color:var(--ink-muted); margin-bottom:14px;">
+        ยื่นหน้าจอนี้ให้เพื่อนสแกน เพื่อเปิดคู่มือและโต๊ะจำลองได้ทันที
+      </p>
+      <img src="assets/elements/qrcode_site.png" alt="QR Code" style="width:230px; height:230px; border-radius:16px; border:2.5px solid var(--border-color); background:#FFF; padding:8px; box-shadow:0 4px 0 var(--border-color); margin:0 auto; display:block;">
+      <div style="margin-top:14px; font-family:'Mali', cursive; font-weight:700; font-size:0.88rem; color:var(--thai-navy); word-break:break-all;">
+        🌐 https://matareal.github.io/meow-boardgame/
+      </div>
+      <button class="btn-primary" style="margin-top:14px; width:100%; justify-content:center;" onclick="copySiteLink()">
+        📋 คัดลอกลิงก์เว็บไซต์
+      </button>
     </div>
   </div>
 
