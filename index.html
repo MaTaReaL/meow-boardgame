@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#9AD9EA" id="metaThemeColor">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>เมี้ยวไม่อยากแห่ — คู่มือและโต๊ะจำลองบอร์ดเกมดิจิตอล</title>
+  <title>เมี้ยวไม่อยากแห่ — คู่มือและบอร์ดเกมดิจิตอล</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
         <img src="assets/elements/cover_main.png" alt="เมี้ยวไม่อยากแห่" class="brand-avatar">
         <div>
           <div class="brand-title">เมี้ยวไม่อยากแห่</div>
-          <div class="brand-subtitle">คู่มือบอร์ดเกม &amp; โต๊ะจำลองระบบเล่นจริง</div>
+          <div class="brand-subtitle">คู่มือบอร์ดเกม &amp; กระดานจำลองระบบเล่นจริง</div>
         </div>
       </div>
 
@@ -41,10 +41,10 @@
     <div class="header-mode-bar">
       <div class="mode-pill-group">
         <button id="btnModeInteractive" class="mode-pill active" onclick="switchTopMode('interactive')">
-          ✨ โต๊ะจำลองเกม
+          🎡 บอร์ดเกม
         </button>
         <button id="btnModeFlipbook" class="mode-pill" onclick="switchTopMode('flipbook')">
-          📖 เปิดคู่มือ 3D
+          📖 คู่มือ
         </button>
       </div>
     </div>
@@ -62,7 +62,7 @@
       <span class="tab-badge">3</span> ⚖️ บทบาท &amp; เตรียมเกม
     </button>
     <button class="nav-tab" data-tab="simulator" onclick="switchTab('simulator')">
-      <span class="tab-badge">4</span> 🎡 กระดาน &amp; วงล้อ
+      <span class="tab-badge">4</span> 🎡 บอร์ดเกม &amp; วงล้อ
     </button>
     <button class="nav-tab" data-tab="gameplay" onclick="switchTab('gameplay')">
       <span class="tab-badge">5</span> 🎮 วิธีเล่น &amp; ถุงโหวต
@@ -80,9 +80,9 @@
     <!-- TAB 1: บทนำ & ประวัติแห่นางแมว -->
     <section id="tab-lore" class="view-section active">
       <div class="hero-banner">
-        <div class="hero-cover-wrap" onclick="switchTopMode('flipbook')" title="แตะเพื่อเปิดอ่านสมุดคู่มือ 3D">
+        <div class="hero-cover-wrap" onclick="switchTopMode('flipbook')" title="แตะเพื่อเปิดอ่านคู่มือ">
           <img src="assets/elements/cover_main.png" alt="ปก เมี้ยวไม่อยากแห่">
-          <div class="hero-cover-badge">📖 เปิดคู่มือ 3D</div>
+          <div class="hero-cover-badge">📖 เปิดอ่านคู่มือ</div>
         </div>
 
         <div class="hero-info">
@@ -113,13 +113,13 @@
 
           <div class="hero-cta-row">
             <button class="btn-primary" onclick="switchTab('simulator')">
-              🎡 ทดลองเล่นบนกระดานจำลอง
+              🎡 ทดลองเล่นบอร์ดเกม
             </button>
             <button class="btn-secondary" onclick="switchTab('components')">
               🎒 ดูอุปกรณ์ในกล่อง
             </button>
             <button class="btn-secondary" onclick="switchTopMode('flipbook')">
-              📖 เปิดคู่มือ 3D (10 หน้า)
+              📖 เปิดอ่านคู่มือ (10 หน้า)
             </button>
             <button class="btn-secondary" onclick="openShareQrModal()">
               📱 สแกน QR ชวนเพื่อนเล่น
@@ -368,7 +368,7 @@
     <section id="tab-simulator" class="view-section">
       <div class="storybook-card">
         <div class="section-header">
-          <span class="section-eyebrow">🎡 โต๊ะทดลองเล่น</span>
+          <span class="section-eyebrow">🎡 บอร์ดเกมจำลอง</span>
           <h2 class="section-title">กระดานจำลอง &amp; วงล้อหมุนจริง</h2>
           <p class="section-desc">
             แตะวงล้อตรงกลางเพื่อสุ่ม หรือกดปุ่มเดินขบวนซ้าย/ขวาเพื่อดูผลการปรับสถานะ (+1 / -1) ทันที
@@ -718,47 +718,65 @@
   </main>
 
   <!-- =========================================================
-       MODE 1: 3D INTERACTIVE FLIPBOOK VIEW
+       E-BOOK MANUAL READER (คู่มือกติกา)
        ========================================================= -->
-  <section id="flipbookMainContainer" class="app-container" style="display:none;">
-    <div class="flipbook-stage">
-      <div class="flipbook-toolbar">
-        <button class="ctrl-btn" onclick="changeSpread(-1)">⬅️ หน้าก่อนหน้า</button>
-        <span id="spreadIndicatorText" style="font-family:'Mali'; font-weight:700; color:var(--thai-navy); padding:0 10px;">
-          คู่หน้าที่ 1 / 5 (หน้า 1–2)
-        </span>
-        <button class="ctrl-btn" onclick="changeSpread(1)">หน้าถัดไป ➡️</button>
-        <button class="btn-primary" style="padding:7px 16px; font-size:0.86rem;" onclick="switchTopMode('interactive')">
-          ✨ กลับโต๊ะจำลองเกม
-        </button>
+  <section id="flipbookMainContainer" class="ebook-reader-container" style="display:none;">
+    <!-- Reader Top Bar -->
+    <div class="ebook-top-bar">
+      <button class="ctrl-btn ebook-back-btn" onclick="switchTopMode('interactive')">
+        ‹ กลับหน้าบอร์ดเกม
+      </button>
+
+      <div class="ebook-page-badge" id="ebookPageBadge">
+        หน้า 1 / 10
       </div>
 
-      <div class="book-viewport">
-        <div class="book-spread">
-          <div class="book-page-slot left-page" onclick="zoomBookPage('left')" title="แตะเพื่อดูภาพขยาย">
-            <img id="bookLeftImg" src="assets/pages/page_01.jpg" alt="หน้าซ้าย">
-            <div id="bookLeftRibbon" class="page-num-ribbon">หน้า 1 / 10</div>
+      <div class="ebook-view-controls">
+        <button id="btnEbookViewToggle" class="ctrl-btn ebook-view-btn" onclick="toggleEbookSpreadMode()" title="สลับหน้าเดี่ยว/คู่หน้า">
+          <span class="lbl-desktop">📄 หน้าเดี่ยว</span>
+          <span class="lbl-mobile">📄</span>
+        </button>
+        <button class="ctrl-btn ebook-fs-btn" onclick="toggleEbookFullscreen()" title="เปิดเต็มจอ">
+          <span class="lbl-desktop">⛶ เต็มจอ</span>
+          <span class="lbl-mobile">⛶</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Reader Stage Area -->
+    <div class="ebook-stage" id="ebookStage">
+      <!-- Floating Navigation Arrow (Prev) -->
+      <button class="ebook-nav-arrow ebook-arrow-prev" id="btnEbookPrev" onclick="ebookPrevPage()" title="หน้าก่อนหน้า (หรือแตะฝั่งซ้ายของหน้าจอ)">
+        ‹
+      </button>
+
+      <!-- The Book Viewport -->
+      <div class="ebook-viewport" id="ebookViewport">
+        <!-- Interactive Page Frame (Tap left or right half to turn page) -->
+        <div class="ebook-page-frame" id="ebookPageFrame">
+          <!-- Page 1 (Single / Left in Spread) -->
+          <div class="ebook-page-item" id="ebookPageLeft" onclick="handleEbookPageClick(event, 'left')">
+            <img id="ebookLeftImg" src="assets/pages/page_01.jpg" alt="หน้าคู่มือ" class="ebook-page-image">
+            <div id="ebookLeftTag" class="ebook-page-tag">หน้า 1 / 10 - หน้าปก</div>
           </div>
-          <div class="book-spine"></div>
-          <div class="book-page-slot right-page" onclick="zoomBookPage('right')" title="แตะเพื่อดูภาพขยาย">
-            <img id="bookRightImg" src="assets/pages/page_02.jpg" alt="หน้าขวา">
-            <div id="bookRightRibbon" class="page-num-ribbon">หน้า 2 / 10</div>
+          <!-- Page 2 (Right in Spread) -->
+          <div class="ebook-page-item" id="ebookPageRight" onclick="handleEbookPageClick(event, 'right')" style="display:none;">
+            <img id="ebookRightImg" src="assets/pages/page_02.jpg" alt="หน้าคู่มือ" class="ebook-page-image">
+            <div id="ebookRightTag" class="ebook-page-tag">หน้า 2 / 10 - ประวัติแห่นางแมว</div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Jump Thumbnails -->
-      <div class="page-thumbnails-strip">
-        <button class="page-thumb-btn active" data-page="1" onclick="jumpToPage(1)"><img src="assets/pages/page_01.jpg" alt="1"><span>1</span></button>
-        <button class="page-thumb-btn active" data-page="2" onclick="jumpToPage(2)"><img src="assets/pages/page_02.jpg" alt="2"><span>2</span></button>
-        <button class="page-thumb-btn" data-page="3" onclick="jumpToPage(3)"><img src="assets/pages/page_03.jpg" alt="3"><span>3</span></button>
-        <button class="page-thumb-btn" data-page="4" onclick="jumpToPage(4)"><img src="assets/pages/page_04.jpg" alt="4"><span>4</span></button>
-        <button class="page-thumb-btn" data-page="5" onclick="jumpToPage(5)"><img src="assets/pages/page_05.jpg" alt="5"><span>5</span></button>
-        <button class="page-thumb-btn" data-page="6" onclick="jumpToPage(6)"><img src="assets/pages/page_06.jpg" alt="6"><span>6</span></button>
-        <button class="page-thumb-btn" data-page="7" onclick="jumpToPage(7)"><img src="assets/pages/page_07.jpg" alt="7"><span>7</span></button>
-        <button class="page-thumb-btn" data-page="8" onclick="jumpToPage(8)"><img src="assets/pages/page_08.jpg" alt="8"><span>8</span></button>
-        <button class="page-thumb-btn" data-page="9" onclick="jumpToPage(9)"><img src="assets/pages/page_09.jpg" alt="9"><span>9</span></button>
-        <button class="page-thumb-btn" data-page="10" onclick="jumpToPage(10)"><img src="assets/pages/page_10.jpg" alt="10"><span>10</span></button>
+      <!-- Floating Navigation Arrow (Next) -->
+      <button class="ebook-nav-arrow ebook-arrow-next" id="btnEbookNext" onclick="ebookNextPage()" title="หน้าถัดไป (หรือแตะฝั่งขวาของหน้าจอ)">
+        ›
+      </button>
+    </div>
+
+    <!-- Quick Jump Thumbnail Strip -->
+    <div class="ebook-bottom-strip">
+      <div class="ebook-strip-inner" id="ebookThumbStrip">
+        <!-- Populated dynamically by app.js -->
       </div>
     </div>
   </section>
@@ -785,7 +803,7 @@
         📱 สแกนเปิดเล่นบนมือถือ
       </div>
       <p style="font-size:0.88rem; color:var(--ink-muted); margin-bottom:14px;">
-        ยื่นหน้าจอนี้ให้เพื่อนสแกน เพื่อเปิดคู่มือและโต๊ะจำลองได้ทันที
+        ยื่นหน้าจอนี้ให้เพื่อนสแกน เพื่อเปิดคู่มือและบอร์ดเกมได้ทันที
       </p>
       <img src="assets/elements/qrcode_site.png" alt="QR Code" style="width:230px; height:230px; border-radius:16px; border:2.5px solid var(--border-color); background:#FFF; padding:8px; box-shadow:0 4px 0 var(--border-color); margin:0 auto; display:block;">
       <div style="margin-top:14px; font-family:'Mali', cursive; font-weight:700; font-size:0.88rem; color:var(--thai-navy); word-break:break-all;">
@@ -813,7 +831,7 @@
     </button>
     <button class="mb-nav-btn" data-tab="simulator" onclick="switchTab('simulator')">
       <span class="mb-icon">🎡</span>
-      <span class="mb-lbl">กระดาน</span>
+      <span class="mb-lbl">บอร์ดเกม</span>
     </button>
     <button class="mb-nav-btn" data-tab="gameplay" onclick="switchTab('gameplay')">
       <span class="mb-icon">🎮</span>
@@ -821,7 +839,7 @@
     </button>
     <button class="mb-nav-btn" data-mode="flipbook" onclick="switchTopMode('flipbook')">
       <span class="mb-icon">📖</span>
-      <span class="mb-lbl">คู่มือ 3D</span>
+      <span class="mb-lbl">คู่มือ</span>
     </button>
   </nav>
 

@@ -1,6 +1,6 @@
 // =========================================================
-// คู่มือดิจิตอลและโต๊ะจำลองบอร์ดเกม “เมี้ยวไม่อยากแห่”
-// Interactive Digital Companion & 3D Rulebook Engine
+// คู่มือดิจิตอลและบอร์ดเกม “เมี้ยวไม่อยากแห่”
+// Interactive Digital Companion & E-Book Rulebook Engine
 // =========================================================
 
 // 1. Web Audio Synthesizer for Tactile Tabletop Feedback
@@ -72,11 +72,11 @@ const COMPONENTS_DATA = [
   },
   {
     id: 'palanquin',
-    name: 'เสลี่ยงนางแมว (3D)',
+    name: 'เสลี่ยงนางแมว',
     qty: '1 หลัง',
     category: 'board',
     img: 'assets/elements/item_palanquin.png',
-    desc: 'หุ่นจำลองเสลี่ยง 3 มิติ ใช้เป็นหมากเดินขบวนหลัก',
+    desc: 'หมากเสลี่ยงประกอบกระดาษ/ไม้ ใช้เป็นหมากเดินขบวนหลัก',
     usage: 'วางที่จุดเริ่ม และเคลื่อนที่ตามผลโหวตเหรียญ'
   },
   {
@@ -206,11 +206,22 @@ let currentTopMode = 'interactive'; // 'interactive' | 'flipbook'
 function switchTopMode(mode) {
   currentTopMode = mode;
   sfx.playPageFlip();
-  document.getElementById('btnModeInteractive').classList.toggle('active', mode === 'interactive');
-  document.getElementById('btnModeFlipbook').classList.toggle('active', mode === 'flipbook');
-  document.getElementById('interactiveNavWrapper').style.display = mode === 'interactive' ? 'flex' : 'none';
-  document.getElementById('interactiveMainContainer').style.display = mode === 'interactive' ? 'block' : 'none';
-  document.getElementById('flipbookMainContainer').style.display = mode === 'flipbook' ? 'block' : 'none';
+  const btnInteractive = document.getElementById('btnModeInteractive');
+  const btnFlipbook = document.getElementById('btnModeFlipbook');
+  if (btnInteractive) btnInteractive.classList.toggle('active', mode === 'interactive');
+  if (btnFlipbook) btnFlipbook.classList.toggle('active', mode === 'flipbook');
+
+  const navWrapper = document.getElementById('interactiveNavWrapper');
+  const mainInteractive = document.getElementById('interactiveMainContainer');
+  const mainFlipbook = document.getElementById('flipbookMainContainer');
+
+  if (navWrapper) navWrapper.style.display = mode === 'interactive' ? 'flex' : 'none';
+  if (mainInteractive) mainInteractive.style.display = mode === 'interactive' ? 'block' : 'none';
+  if (mainFlipbook) mainFlipbook.style.display = mode === 'flipbook' ? 'block' : 'none';
+
+  if (mode === 'flipbook') {
+    renderEbookPage();
+  }
 
   // Sync mobile bottom navigation
   document.querySelectorAll('.mb-nav-btn').forEach(btn => {
@@ -220,6 +231,7 @@ function switchTopMode(mode) {
       if (btn.dataset.mode === 'flipbook') btn.classList.remove('active');
     }
   });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function switchTab(tabId) {
@@ -572,81 +584,193 @@ function clearBagCoins() {
 }
 
 // =========================================================
-// MODE 1: 3D INTERACTIVE FLIPBOOK ENGINE (10 PAGES)
+// E-BOOK MANUAL READER ENGINE (10 HIGH-RES PAGES)
 // =========================================================
-let currentSpreadIndex = 0;
-// Spreads:
-// 0: Cover [Page 1] & History 1 [Page 2]
-// 1: History 2 [Page 3] & Components [Page 4]
-// 2: Goals/Roles [Page 5] & Setup Rules [Page 6]
-// 3: Setup Board [Page 7] & Gameplay 1-3 [Page 8]
-// 4: Gameplay 4-5 & Endgame [Page 9] & Credits [Page 10]
-const SPREAD_PAIRS = [
-  [1, 2],
-  [3, 4],
-  [5, 6],
-  [7, 8],
-  [9, 10]
+const EBOOK_PAGES = [
+  { num: 1, title: 'หน้าปก', img: 'assets/pages/page_01.jpg' },
+  { num: 2, title: 'ประวัติแห่นางแมว', img: 'assets/pages/page_02.jpg' },
+  { num: 3, title: 'คุณค่า & การประยุกต์', img: 'assets/pages/page_03.jpg' },
+  { num: 4, title: 'อุปกรณ์ในกล่อง (11 ชิ้น)', img: 'assets/pages/page_04.jpg' },
+  { num: 5, title: 'เป้าหมาย & บทบาทผู้เล่น', img: 'assets/pages/page_05.jpg' },
+  { num: 6, title: 'วิธีจัดเตรียมเกม 5 ขั้นตอน', img: 'assets/pages/page_06.jpg' },
+  { num: 7, title: 'ตัวอย่างจัดกระดานบอร์ด', img: 'assets/pages/page_07.jpg' },
+  { num: 8, title: 'รอบการเล่น & ขั้นที่ 1–3', img: 'assets/pages/page_08.jpg' },
+  { num: 9, title: 'ขั้นที่ 4–5 & เงื่อนไขจบเกม', img: 'assets/pages/page_09.jpg' },
+  { num: 10, title: 'คณะผู้จัดทำ', img: 'assets/pages/page_10.jpg' }
 ];
 
-const PAGE_TITLES = {
-  1: 'หน้าปก',
-  2: 'ประวัติแห่นางแมว',
-  3: 'คุณค่า & การประยุกต์',
-  4: 'อุปกรณ์ในกล่อง (11 ชิ้น)',
-  5: 'เป้าหมาย & บทบาทผู้เล่น',
-  6: 'วิธีจัดเตรียมเกม 5 ขั้นตอน',
-  7: 'ตัวอย่างจัดกระดานบอร์ด',
-  8: 'รอบการเล่น & ขั้นที่ 1–3',
-  9: 'ขั้นที่ 4–5 & เงื่อนไขจบเกม',
-  10: 'คณะผู้จัดทำ'
-};
+let currentEbookPage = 1; // 1 to 10
+let isEbookSpreadMode = false; // default single page for high legibility & clarity
 
-function renderFlipbookSpread() {
-  const [leftNum, rightNum] = SPREAD_PAIRS[currentSpreadIndex];
-  const leftImg = document.getElementById('bookLeftImg');
-  const rightImg = document.getElementById('bookRightImg');
-  if (!leftImg || !rightImg) return;
+function initEbookReader() {
+  const strip = document.getElementById('ebookThumbStrip');
+  if (strip) {
+    strip.innerHTML = EBOOK_PAGES.map(p => `
+      <button class="ebook-thumb-btn ${p.num === currentEbookPage ? 'active' : ''}" 
+              data-page="${p.num}" 
+              onclick="jumpToEbookPage(${p.num})" 
+              title="หน้า ${p.num}: ${p.title}">
+        <img src="${p.img}" alt="หน้า ${p.num}" loading="lazy">
+        <span>${p.num}</span>
+      </button>
+    `).join('');
+  }
+  renderEbookPage();
+  setupEbookGestures();
+}
 
-  leftImg.src = `assets/pages/page_${String(leftNum).padStart(2, '0')}.jpg`;
-  rightImg.src = `assets/pages/page_${String(rightNum).padStart(2, '0')}.jpg`;
+function renderEbookPage() {
+  const leftPageEl = document.getElementById('ebookPageLeft');
+  const rightPageEl = document.getElementById('ebookPageRight');
+  const leftImg = document.getElementById('ebookLeftImg');
+  const rightImg = document.getElementById('ebookRightImg');
+  const leftTag = document.getElementById('ebookLeftTag');
+  const rightTag = document.getElementById('ebookRightTag');
+  const pageBadge = document.getElementById('ebookPageBadge');
+  const btnPrev = document.getElementById('btnEbookPrev');
+  const btnNext = document.getElementById('btnEbookNext');
+  const frame = document.getElementById('ebookPageFrame');
 
-  document.getElementById('bookLeftRibbon').textContent = `หน้า ${leftNum}/10 • ${PAGE_TITLES[leftNum]}`;
-  document.getElementById('bookRightRibbon').textContent = `หน้า ${rightNum}/10 • ${PAGE_TITLES[rightNum]}`;
-  document.getElementById('spreadIndicatorText').textContent = `คู่หน้า ${currentSpreadIndex + 1}/${SPREAD_PAIRS.length} (หน้า ${leftNum}–${rightNum})`;
+  if (!leftImg || !pageBadge) return;
 
-  // Update active thumbnails
-  document.querySelectorAll('.page-thumb-btn').forEach(btn => {
+  const page = EBOOK_PAGES[currentEbookPage - 1];
+  leftImg.src = page.img;
+  leftImg.alt = `หน้า ${page.num}: ${page.title}`;
+  leftTag.textContent = `หน้า ${page.num} / 10 - ${page.title}`;
+
+  const isMobile = window.innerWidth <= 768;
+
+  if (isEbookSpreadMode && currentEbookPage < EBOOK_PAGES.length) {
+    const nextP = EBOOK_PAGES[currentEbookPage];
+    rightImg.src = nextP.img;
+    rightImg.alt = `หน้า ${nextP.num}: ${nextP.title}`;
+    rightTag.textContent = `หน้า ${nextP.num} / 10 - ${nextP.title}`;
+    rightPageEl.style.display = 'flex';
+    frame.classList.add('spread-mode');
+    pageBadge.textContent = isMobile
+      ? `หน้า ${page.num}–${nextP.num} / 10`
+      : `หน้า ${page.num}–${nextP.num} / 10 - ${page.title}`;
+  } else {
+    rightPageEl.style.display = 'none';
+    frame.classList.remove('spread-mode');
+    pageBadge.textContent = isMobile
+      ? `หน้า ${page.num} / 10`
+      : `หน้า ${page.num} / 10 - ${page.title}`;
+  }
+
+  // Update navigation arrows
+  if (btnPrev) btnPrev.disabled = currentEbookPage <= 1;
+  if (btnNext) btnNext.disabled = currentEbookPage >= EBOOK_PAGES.length;
+
+  // Update thumbnails
+  document.querySelectorAll('.ebook-thumb-btn').forEach(btn => {
     const p = parseInt(btn.dataset.page, 10);
-    btn.classList.toggle('active', p === leftNum || p === rightNum);
+    const active = isEbookSpreadMode
+      ? (p === currentEbookPage || p === currentEbookPage + 1)
+      : (p === currentEbookPage);
+    btn.classList.toggle('active', active);
+    if (active) {
+      btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
   });
 }
 
-function changeSpread(delta) {
-  const next = currentSpreadIndex + delta;
-  if (next < 0 || next >= SPREAD_PAIRS.length) return;
-  sfx.playPageFlip();
-  currentSpreadIndex = next;
-  renderFlipbookSpread();
+function ebookNextPage() {
+  const step = isEbookSpreadMode ? 2 : 1;
+  if (currentEbookPage < EBOOK_PAGES.length) {
+    sfx.playPageFlip();
+    currentEbookPage = Math.min(EBOOK_PAGES.length, currentEbookPage + step);
+    renderEbookPage();
+  }
 }
 
-function jumpToPage(pageNum) {
-  sfx.playPageFlip();
-  const idx = Math.floor((pageNum - 1) / 2);
-  currentSpreadIndex = Math.max(0, Math.min(SPREAD_PAIRS.length - 1, idx));
-  renderFlipbookSpread();
+function ebookPrevPage() {
+  const step = isEbookSpreadMode ? 2 : 1;
+  if (currentEbookPage > 1) {
+    sfx.playPageFlip();
+    currentEbookPage = Math.max(1, currentEbookPage - step);
+    renderEbookPage();
+  }
 }
 
-function zoomBookPage(side) {
-  const [leftNum, rightNum] = SPREAD_PAIRS[currentSpreadIndex];
-  const pNum = side === 'left' ? leftNum : rightNum;
-  sfx.playTick(680, 0.05);
-  document.getElementById('modalImg').src = `assets/pages/page_${String(pNum).padStart(2, '0')}.jpg`;
-  document.getElementById('modalQty').textContent = `หน้า ${pNum}/10`;
-  document.getElementById('modalTitle').textContent = PAGE_TITLES[pNum];
-  document.getElementById('modalDesc').textContent = 'เปิดโหมดจำลองเพื่อทดลองเล่นบอร์ด หมุนวงล้อ และโหวตเหรียญแบบโต้ตอบ';
-  document.getElementById('modalUsage').textContent = '💡 แตะพื้นที่ว่างหรือเครื่องหมาย ✕ เพื่อปิด';
-  document.getElementById('componentModal').classList.add('open');
+function jumpToEbookPage(pageNum) {
+  if (pageNum >= 1 && pageNum <= EBOOK_PAGES.length) {
+    sfx.playPageFlip();
+    currentEbookPage = pageNum;
+    renderEbookPage();
+  }
+}
+
+function handleEbookPageClick(e, side) {
+  if (isEbookSpreadMode) {
+    if (side === 'left') ebookPrevPage();
+    else ebookNextPage();
+  } else {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    if (clickX < rect.width * 0.4) {
+      ebookPrevPage();
+    } else {
+      ebookNextPage();
+    }
+  }
+}
+
+function toggleEbookSpreadMode() {
+  sfx.playTick(550, 0.05);
+  isEbookSpreadMode = !isEbookSpreadMode;
+  const btn = document.getElementById('btnEbookViewToggle');
+  if (btn) {
+    btn.innerHTML = isEbookSpreadMode
+      ? '<span class="lbl-desktop">📖 คู่หน้า</span><span class="lbl-mobile">📖</span>'
+      : '<span class="lbl-desktop">📄 หน้าเดี่ยว</span><span class="lbl-mobile">📄</span>';
+  }
+  renderEbookPage();
+}
+
+function toggleEbookFullscreen() {
+  sfx.playChime();
+  const elem = document.getElementById('flipbookMainContainer');
+  if (!document.fullscreenElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+
+// Touch swipe gestures for seamless e-book page turning
+function setupEbookGestures() {
+  const stage = document.getElementById('ebookStage');
+  if (!stage) return;
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  stage.addEventListener('touchstart', (e) => {
+    if (e.changedTouches.length === 1) {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    }
+  }, { passive: true });
+
+  stage.addEventListener('touchend', (e) => {
+    if (e.changedTouches.length === 1) {
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        if (deltaX < 0) {
+          ebookNextPage();
+        } else {
+          ebookPrevPage();
+        }
+      }
+    }
+  }, { passive: true });
 }
 
 // =========================================================
@@ -776,15 +900,15 @@ window.addEventListener('DOMContentLoaded', () => {
   renderComponents('all');
   selectPlayerCount(6);
   renderBoardSimulator();
-  renderFlipbookSpread();
+  initEbookReader();
   initParticles();
   animateParticles();
 
-  // Keyboard navigation for 3D Flipbook
+  // Keyboard navigation for E-Book Manual Reader
   window.addEventListener('keydown', (e) => {
     if (currentTopMode === 'flipbook') {
-      if (e.key === 'ArrowRight') changeSpread(1);
-      if (e.key === 'ArrowLeft') changeSpread(-1);
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') ebookNextPage();
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') ebookPrevPage();
     }
     if (e.key === 'Escape') closeComponentModal();
   });
