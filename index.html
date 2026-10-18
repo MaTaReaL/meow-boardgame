@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="theme-color" content="#9AD9EA" id="metaThemeColor">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>เมี้ยวไม่อยากแห่ — คู่มือและโต๊ะจำลองบอร์ดเกมดิจิตอล</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background & Weather Particles -->
+  <div class="village-backdrop"></div>
+  <canvas id="weatherCanvas"></canvas>
+
+  <!-- App Header & Mode Switcher -->
+  <header class="top-header">
+    <div class="header-top-row">
+      <div class="brand-group" onclick="switchTab('lore')">
+        <img src="assets/elements/cover_main.png" alt="เมี้ยวไม่อยากแห่" class="brand-avatar">
+        <div>
+          <div class="brand-title">เมี้ยวไม่อยากแห่</div>
+          <div class="brand-subtitle">คู่มือบอร์ดเกม &amp; โต๊ะจำลองระบบเล่นจริง</div>
+        </div>
+      </div>
+
+      <div class="header-action-btns">
+        <button id="btnWeatherToggle" class="ctrl-btn" onclick="toggleWeatherMode()" title="สลับโหมดสว่าง/โหมดมืด">
+          <span class="lbl-desktop">☀️ กลางวัน (โหมดสว่าง)</span>
+          <span class="lbl-mobile">☀️ สว่าง</span>
+        </button>
+        <button id="btnSoundToggle" class="ctrl-btn" onclick="toggleSoundMode()" title="เปิด/ปิดเสียง">
+          <span class="lbl-desktop">🔊 เสียง: เปิด</span>
+          <span class="lbl-mobile">🔊 เปิด</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="header-mode-bar">
+      <div class="mode-pill-group">
+        <button id="btnModeInteractive" class="mode-pill active" onclick="switchTopMode('interactive')">
+          ✨ โต๊ะจำลองเกม
+        </button>
+        <button id="btnModeFlipbook" class="mode-pill" onclick="switchTopMode('flipbook')">
+          📖 เปิดคู่มือ 3D
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav id="interactiveNavWrapper" class="chapter-nav">
+    <button class="nav-tab active" data-tab="lore" onclick="switchTab('lore')">
+      <span class="tab-badge">1</span> 🏠 บทนำ &amp; ที่มา
+    </button>
+    <button class="nav-tab" data-tab="components" onclick="switchTab('components')">
+      <span class="tab-badge">2</span> 🎒 อุปกรณ์ (11 ชิ้น)
+    </button>
+    <button class="nav-tab" data-tab="setup" onclick="switchTab('setup')">
+      <span class="tab-badge">3</span> ⚖️ บทบาท &amp; เตรียมเกม
+    </button>
+    <button class="nav-tab" data-tab="simulator" onclick="switchTab('simulator')">
+      <span class="tab-badge">4</span> 🎡 กระดาน &amp; วงล้อ
+    </button>
+    <button class="nav-tab" data-tab="gameplay" onclick="switchTab('gameplay')">
+      <span class="tab-badge">5</span> 🎮 วิธีเล่น &amp; ถุงโหวต
+    </button>
+    <button class="nav-tab" data-tab="credits" onclick="switchTab('credits')">
+      <span class="tab-badge">6</span> 🎓 คณะผู้จัดทำ
+    </button>
+  </nav>
+
+  <!-- =========================================================
+       MAIN INTERACTIVE WORKSPACE
+       ========================================================= -->
+  <main id="interactiveMainContainer" class="app-container">
+
+    <!-- TAB 1: บทนำ & ประวัติแห่นางแมว -->
+    <section id="tab-lore" class="view-section active">
+      <div class="hero-banner">
+        <div class="hero-cover-wrap" onclick="switchTopMode('flipbook')" title="แตะเพื่อเปิดอ่านสมุดคู่มือ 3D">
+          <img src="assets/elements/cover_main.png" alt="ปก เมี้ยวไม่อยากแห่">
+          <div class="hero-cover-badge">📖 เปิดคู่มือ 3D</div>
+        </div>
+
+        <div class="hero-info">
+          <span class="section-eyebrow">🐾 บอร์ดเกมสืบสวนและวางแผนกลยุทธ์</span>
+          <h1>เมี้ยว ไม่อยากแห่!</h1>
+          <p class="hero-lead">
+            <strong>เป้าหมายหลัก:</strong> ร่วมมือกันนำขบวนแห่นางแมวฟื้นฟูหมู่บ้านให้พ้นภัยแล้ง แต่ระวัง! ในกลุ่มมี <em>"ทาสแมว"</em> แฝงตัวคอยปั่นป่วนขบวนแห่เพื่อปกป้องน้องแมวไม่ให้โดนแห่
+          </p>
+
+          <div class="quick-stats-row">
+            <div class="stat-chip">
+              <div class="stat-val">5–8 คน</div>
+              <div class="stat-lbl">ผู้เล่น</div>
+            </div>
+            <div class="stat-chip">
+              <div class="stat-val">5–8 รอบ</div>
+              <div class="stat-lbl">ตามจำนวนคน</div>
+            </div>
+            <div class="stat-chip">
+              <div class="stat-val">8 แห่ง</div>
+              <div class="stat-lbl">หมู่บ้านรอบเกาะ</div>
+            </div>
+            <div class="stat-chip">
+              <div class="stat-val">2 ฝ่าย</div>
+              <div class="stat-lbl">ชาวบ้าน vs ทาสแมว</div>
+            </div>
+          </div>
+
+          <div class="hero-cta-row">
+            <button class="btn-primary" onclick="switchTab('simulator')">
+              🎡 ทดลองเล่นบนกระดานจำลอง
+            </button>
+            <button class="btn-secondary" onclick="switchTab('components')">
+              🎒 ดูอุปกรณ์ในกล่อง
+            </button>
+            <button class="btn-secondary" onclick="switchTopMode('flipbook')">
+              📖 เปิดคู่มือ 3D (10 หน้า)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- สาระความรู้และที่มาของเกม -->
+      <div class="storybook-card">
+        <div class="section-header">
+          <span class="section-eyebrow">📜 รากฐานประเพณีสู่งานออกแบบ</span>
+          <h2 class="section-title">ประวัติแห่นางแมว สู่กลไกบอร์ดเกม</h2>
+          <p class="section-desc">
+            เชื่อมโยงภูมิปัญญาพื้นบ้านเรื่องการขอฝน เข้ากับระบบการตัดสินใจและการเจรจาร่วมกัน
+          </p>
+        </div>
+
+        <div class="lore-grid">
+          <article class="lore-card">
+            <div class="lore-card-header">
+              <div class="lore-icon">🌾</div>
+              <h3>ความเป็นมาของประเพณี</h3>
+            </div>
+            <p>
+              พิธีกรรมขอฝนของชุมชนเกษตรกรรมไทยในอดีต ยามประสบภัยแล้งชาวบ้านจะรวมพลังจัดพิธีแห่นางแมวเพื่อขอให้น้ำท่าอุดมสมบูรณ์ สะท้อนสายสัมพันธ์อันแนบแน่นระหว่างวิถีชีวิต ธรรมชาติ และความเชื่อของคนในชุมชน
+            </p>
+          </article>
+
+          <article class="lore-card">
+            <div class="lore-card-header">
+              <div class="lore-icon">🐈‍⬛</div>
+              <h3>ลักษณะของพิธีกรรม</h3>
+            </div>
+            <p>
+              นำแมวใส่ภาชนะแห่รอบชุมชน พร้อมขับร้องบทสวดขอฝนและมีการรดน้ำแมว โดยแต่ละท้องถิ่นมีรายละเอียดพิธีที่แตกต่างกันตามบริบททางวัฒนธรรมและอัตลักษณ์ของตน
+            </p>
+          </article>
+
+          <article class="lore-card">
+            <div class="lore-card-header">
+              <div class="lore-icon">🤝</div>
+              <h3>คุณค่าทางสังคม</h3>
+            </div>
+            <p>
+              สะท้อนพลังการมีส่วนร่วม ความร่วมมือเอื้ออาทร และการส่งต่อภูมิปัญญาสู่คนรุ่นใหม่ ช่วยให้เข้าใจวิถีชีวิตและการพึ่งพาอาศัยกันในสังคมเกษตรกรรมไทย
+            </p>
+          </article>
+
+          <article class="lore-card">
+            <div class="lore-card-header">
+              <div class="lore-icon">🎲</div>
+              <h3>การต่อยอดสู่บอร์ดเกม</h3>
+            </div>
+            <p>
+              แปลงสถานการณ์ภัยแล้งเป็นโจทย์ท้าทาย: ผู้เล่นร่วมกันเลือกทิศทางเดินขบวนเพื่อฟื้นฟูหมู่บ้าน ขณะที่ฝ่าย <em>ทาสแมว</em> คอยปั่นป่วนแบบลับๆ กระตุ้นการคิดวิเคราะห์ การเจรจา และการสังเกตพฤติกรรมระหว่างเล่น
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: อุปกรณ์ภายในกล่อง -->
+    <section id="tab-components" class="view-section">
+      <div class="storybook-card">
+        <div class="section-header">
+          <span class="section-eyebrow">🎒 ส่วนประกอบเกม</span>
+          <h2 class="section-title">อุปกรณ์ภายในกล่อง (11 รายการ)</h2>
+          <p class="section-desc">
+            แตะที่อุปกรณ์เพื่อดูภาพขยาย หน้าที่ และวิธีการใช้งานในเกม
+          </p>
+        </div>
+
+        <div class="component-filter-bar">
+          <button class="filter-chip active" onclick="filterComponents('all', this)">ทั้งหมด (11)</button>
+          <button class="filter-chip" onclick="filterComponents('board', this)">กระดาน &amp; เสลี่ยง</button>
+          <button class="filter-chip" onclick="filterComponents('cards', this)">การ์ดตัวละคร</button>
+          <button class="filter-chip" onclick="filterComponents('tokens', this)">เหรียญ &amp; หมุด</button>
+          <button class="filter-chip" onclick="filterComponents('bags', this)">ถุงผ้า</button>
+        </div>
+
+        <div id="componentsGrid" class="components-grid"></div>
+
+        <!-- เหรียญทิศทาง & บทบาท -->
+        <div class="role-coin-showcase">
+          <div class="sub-panel">
+            <h3>🪙 เหรียญทิศทาง (ใช้กำหนดเส้นทางขบวนแห่)</h3>
+            <p style="color:var(--ink-brown); line-height:1.6;">
+              เหรียญพลาสติก 2 สี ใช้ลงคะแนนลับเพื่อกำหนดทิศทางเดินขบวน:
+            </p>
+            <div class="coin-pair-box">
+              <div class="coin-demo-card purple" onclick="openComponentModal('coin_left')">
+                <img src="assets/elements/item_coin_left.png" alt="เหรียญซ้าย">
+                <div style="font-family:'Mali'; font-weight:700; color:var(--coin-purple); font-size:1.05rem;">สีม่วง: แห่ไปทางซ้าย (32 เหรียญ)</div>
+                <div style="font-size:0.86rem; color:var(--ink-brown);">เดินทวนเข็มนาฬิกาตามลูกศรม่วง</div>
+              </div>
+              <div class="coin-demo-card pink" onclick="openComponentModal('coin_right')">
+                <img src="assets/elements/item_coin_right.png" alt="เหรียญขวา">
+                <div style="font-family:'Mali'; font-weight:700; color:var(--coin-pink); font-size:1.05rem;">สีชมพู: แห่ไปทางขวา (32 เหรียญ)</div>
+                <div style="font-size:0.86rem; color:var(--ink-brown);">เดินตามเข็มนาฬิกาตามลูกศรชมพู</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-panel">
+            <h3>🎭 บทบาทตัวละคร (2 ฝ่ายลับ)</h3>
+            <p style="color:var(--ink-brown); line-height:1.6;">
+              ผู้เล่นแต่ละคนจะได้รับการ์ดลับ 1 ใบ และต้องเล่นตามเป้าหมายของฝ่ายตน:
+            </p>
+            <div class="coin-pair-box">
+              <div class="coin-demo-card" style="background:#F0FDF4; border-color:var(--status-green);" onclick="openComponentModal('card_villager')">
+                <img src="assets/elements/item_card_villager.png" alt="ชาวบ้าน">
+                <div style="font-family:'Mali'; font-weight:700; color:var(--status-green); font-size:1.05rem;">ชาวบ้าน (6 ใบ)</div>
+                <div style="font-size:0.85rem; color:var(--ink-brown);">นำขบวนแห่ไปฟื้นฟูหมู่บ้านที่กำลังแล้ง</div>
+              </div>
+              <div class="coin-demo-card" style="background:#FFF0F3; border-color:var(--thai-red);" onclick="openComponentModal('card_catslave')">
+                <img src="assets/elements/item_card_catslave.png" alt="ทาสแมว">
+                <div style="font-family:'Mali'; font-weight:700; color:var(--thai-red); font-size:1.05rem;">ทาสแมว (2 ใบ)</div>
+                <div style="font-size:0.85rem; color:var(--ink-brown);">ปั่นป่วนขบวนแห่ไม่ให้ช่วยหมู่บ้านสำเร็จ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: บทบาท & การจัดเตรียมเกม -->
+    <section id="tab-setup" class="view-section">
+      <div class="storybook-card">
+        <div class="section-header">
+          <span class="section-eyebrow">⚖️ ระบบคำนวณอัตโนมัติ</span>
+          <h2 class="section-title">จัดเตรียมเกม &amp; สัดส่วนผู้เล่น</h2>
+          <p class="section-desc">
+            เลือกจำนวนผู้เล่นเพื่อคำนวณการ์ดบทบาท เหรียญ และจำนวนรอบเล่นทันที
+          </p>
+        </div>
+
+        <!-- Calculator Box -->
+        <div class="calculator-box">
+          <div style="text-align:center; font-family:'Mali'; font-weight:700; font-size:1.15rem; color:var(--thai-navy);">
+            👥 เลือกจำนวนผู้เล่น:
+          </div>
+          <div class="player-count-btns">
+            <button class="p-count-btn" data-count="5" onclick="selectPlayerCount(5)">5 คน</button>
+            <button class="p-count-btn active" data-count="6" onclick="selectPlayerCount(6)">6 คน</button>
+            <button class="p-count-btn" data-count="7" onclick="selectPlayerCount(7)">7 คน</button>
+            <button class="p-count-btn" data-count="8" onclick="selectPlayerCount(8)">8 คน</button>
+          </div>
+
+          <div class="calc-results-grid">
+            <div class="calc-stat-card">
+              <div style="font-size:0.85rem; color:var(--ink-muted); font-weight:600;">🌾 ฝ่ายชาวบ้าน</div>
+              <div id="calcVillagers" class="big-num" style="color:var(--status-green)">5 คน</div>
+              <div style="font-size:0.8rem; color:var(--ink-brown);">เป้าหมาย: ช่วยหมู่บ้าน</div>
+            </div>
+            <div class="calc-stat-card">
+              <div style="font-size:0.85rem; color:var(--ink-muted); font-weight:600;">🐾 ฝ่ายทาสแมว</div>
+              <div id="calcCatSlaves" class="big-num" style="color:var(--thai-red)">1 คน</div>
+              <div style="font-size:0.8rem; color:var(--ink-brown);">เป้าหมาย: ปั่นป่วนขบวน</div>
+            </div>
+            <div class="calc-stat-card">
+              <div style="font-size:0.85rem; color:var(--ink-muted); font-weight:600;">🪙 แจกเหรียญ</div>
+              <div id="calcCoins" class="big-num" style="color:var(--coin-purple)">6 เหรียญ/คน</div>
+              <div style="font-size:0.8rem; color:var(--ink-brown);">ใส่ถุงประจำตัว</div>
+            </div>
+            <div class="calc-stat-card">
+              <div style="font-size:0.85rem; color:var(--ink-muted); font-weight:600;">⏳ รอบเล่นทั้งหมด</div>
+              <div id="calcTurns" class="big-num" style="color:var(--thai-navy)">6 รอบ</div>
+              <div style="font-size:0.8rem; color:var(--ink-brown);">วนเป็นหัวหน้าครบทุกคน</div>
+            </div>
+          </div>
+
+          <div id="calcVisualCards" class="calc-visual-cards"></div>
+        </div>
+
+        <!-- 5 Steps Setup -->
+        <div class="setup-steps-layout">
+          <div>
+            <h3 style="font-size:1.3rem; color:var(--thai-navy); margin-bottom:12px;">
+              📋 ขั้นตอนจัดเตรียมก่อนเล่น (5 ขั้น)
+            </h3>
+
+            <div class="setup-step-item" onclick="toggleSetupStep(this)">
+              <div class="step-num-circle">1</div>
+              <div class="setup-step-body">
+                <h4>1. เลือกหัวหน้าขบวน</h4>
+                <p>เลือกผู้เล่น 1 คนเป็นหัวหน้าขบวนรอบแรก และเลือกหมู่บ้านเริ่มต้นสำหรับวางเสลี่ยง</p>
+              </div>
+            </div>
+
+            <div class="setup-step-item" onclick="toggleSetupStep(this)">
+              <div class="step-num-circle">2</div>
+              <div class="setup-step-body">
+                <h4>2. แจกบทบาท &amp; โทเคนสี</h4>
+                <p>สับการ์ดแจกคนละ 1 ใบ ดูบทบาทลับของตน และเลือกโทเคนสีวางตรงหน้าเพื่อระบุตัวตน</p>
+              </div>
+            </div>
+
+            <div class="setup-step-item" onclick="toggleSetupStep(this)">
+              <div class="step-num-circle">3</div>
+              <div class="setup-step-body">
+                <h4>3. แจกเหรียญตามจำนวนคน</h4>
+                <p>
+                  สุ่มแจกเหรียญใส่ถุงผู้เล่นตามจำนวนผู้เล่น:<br>
+                  <strong>5 คน:</strong> 5 เหรียญ | <strong>6 คน:</strong> 6 เหรียญ | <strong>7 คน:</strong> 7 เหรียญ | <strong>8 คน:</strong> 8 เหรียญ
+                </p>
+              </div>
+            </div>
+
+            <div class="setup-step-item" onclick="toggleSetupStep(this)">
+              <div class="step-num-circle">4</div>
+              <div class="setup-step-body">
+                <h4>4. ตั้งสถานะ &amp; สุ่มวงล้อ</h4>
+                <p>วางหมุดสถานะที่ "สีเขียว" ทุกหมู่บ้าน จากนั้นหมุนวงล้อสุ่ม 1 หมู่บ้านเพื่อเปลี่ยนเป็น "สีเหลือง" ทันที</p>
+              </div>
+            </div>
+
+            <div class="setup-step-item" onclick="toggleSetupStep(this)">
+              <div class="step-num-circle">5</div>
+              <div class="setup-step-body">
+                <h4>5. วางเสลี่ยงเตรียมเริ่ม</h4>
+                <p>วางเสลี่ยงไว้ที่หมู่บ้านเริ่มต้นที่หัวหน้าขบวนเลือกไว้ พร้อมเริ่มออกเดินทางรอบแรก</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="setup-diagram-card">
+            <h4 style="font-family:'Mali'; font-size:1.15rem; color:var(--thai-red); margin-bottom:10px;">
+              🗺️ แผนผังจัดกระดานเริ่มต้น
+            </h4>
+            <img src="assets/elements/board_setup_full.png" alt="แผนผังจัดกระดาน">
+            <div class="setup-notes-list">
+              <div>🟢 <strong>สถานะเริ่มต้น:</strong> ทุกหมู่บ้านเริ่มที่ "สีเขียว" (สมบูรณ์)</div>
+              <div>🐈‍⬛ <strong>ตำแหน่งเสลี่ยง:</strong> วางที่หมู่บ้านที่หัวหน้าเลือก (เช่น บ้านทุ่งรวงทอง)</div>
+              <div>🟡 <strong>ผลสุ่มวงล้อ:</strong> หมู่บ้านที่เข็มชี้จะเปลี่ยนเป็น "สีเหลือง" (ปกติ) ทันที</div>
+            </div>
+            <button class="btn-primary" style="margin-top:14px; width:100%; justify-content:center;" onclick="switchTab('simulator')">
+              🎡 ทดลองบนกระดานจำลอง
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: กระดานจำลอง 8 หมู่บ้าน & วงล้อหมุนจริง -->
+    <section id="tab-simulator" class="view-section">
+      <div class="storybook-card">
+        <div class="section-header">
+          <span class="section-eyebrow">🎡 โต๊ะทดลองเล่น</span>
+          <h2 class="section-title">กระดานจำลอง &amp; วงล้อหมุนจริง</h2>
+          <p class="section-desc">
+            แตะวงล้อตรงกลางเพื่อสุ่ม หรือกดปุ่มเดินขบวนซ้าย/ขวาเพื่อดูผลการปรับสถานะ (+1 / -1) ทันที
+          </p>
+        </div>
+
+        <div class="board-sim-layout">
+          <!-- Board Stage -->
+          <div class="board-stage-wrap">
+            <img src="assets/elements/item_board.png" class="board-base-img" alt="กระดาน 8 หมู่บ้าน">
+
+            <!-- Center Spinner -->
+            <div class="center-spinner-wrap" onclick="spinCenterWheel()" title="แตะเพื่อหมุนวงล้อ">
+              <div id="spinnerArrowEl" class="spinner-arrow">
+                <svg class="spinner-arrow-svg" viewBox="0 0 120 36">
+                  <path d="M18 14 L82 14 L82 6 L116 18 L82 30 L82 22 L18 22 Z" fill="#D32F2F" stroke="#2C1A11" stroke-width="3" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="spinner-center-cap"></div>
+              <div class="spinner-hint">👆 แตะหมุนวงล้อ</div>
+            </div>
+
+            <!-- 8 Village Hotspots -->
+            <div id="villageNodesContainer"></div>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="sim-controls-panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+              <span id="simCurrentTurn" class="step-tag" style="font-size:0.95rem;">รอบที่ 1 / 6</span>
+              <span style="font-family:'Mali'; font-weight:700; color:var(--thai-navy);">
+                📍 เสลี่ยงอยู่ที่: <strong id="simCurrentVillage" style="color:var(--thai-red);">บ้านทุ่งรวงทอง</strong>
+              </span>
+            </div>
+
+            <div class="sim-status-summary">
+              <div class="status-count-box green">
+                🟢 สมบูรณ์<br><span id="simCountGreen" style="font-size:1.3rem;">7 แห่ง</span>
+              </div>
+              <div class="status-count-box yellow">
+                🟡 ปกติ<br><span id="simCountYellow" style="font-size:1.3rem;">1 แห่ง</span>
+              </div>
+              <div class="status-count-box red">
+                🔴 แล้ง<br><span id="simCountRed" style="font-size:1.3rem;">0 แห่ง</span>
+              </div>
+            </div>
+
+            <div id="simEndgameBanner" style="display:none; padding:12px 14px; border-radius:12px; border:2px solid #3A2214; margin:12px 0; font-size:0.95rem;"></div>
+
+            <div class="sim-action-card">
+              <div style="font-family:'Mali'; font-weight:700; color:var(--ink-dark); margin-bottom:8px;">
+                🎮 ควบคุมการเดินขบวนแห่:
+              </div>
+              <div class="sim-action-btns">
+                <button class="btn-move-left" onclick="movePalanquin('left')">
+                  🟣 แห่ไปทางซ้าย (↺)<br><small>ทวนเข็มนาฬิกา (+1 / -1)</small>
+                </button>
+                <button class="btn-move-right" onclick="movePalanquin('right')">
+                  🩷 แห่ไปทางขวา (↻)<br><small>ตามเข็มนาฬิกา (+1 / -1)</small>
+                </button>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+                <button class="ctrl-btn" style="justify-content:center;" onclick="movePalanquin('stay')">
+                  ⏸️ อยู่ที่เดิมรอบ 2 (-1)
+                </button>
+                <button class="ctrl-btn" style="justify-content:center;" onclick="spinCenterWheel()">
+                  🎡 สุ่มวงล้อใหม่
+                </button>
+              </div>
+              <button class="ctrl-btn btn-reset" onclick="resetBoardSimulator()">
+                🔄 รีเซ็ตกระดานเริ่มต้น
+              </button>
+            </div>
+
+            <div style="margin-top:14px; font-family:'Mali'; font-weight:700; font-size:0.95rem; color:var(--thai-navy);">
+              📜 บันทึกสถานะ (Log):
+            </div>
+            <div id="simLogBox" class="sim-log-box">
+              <div>✨ แตะวงล้อสีเหลืองเพื่อสุ่ม หรือกดปุ่มเดินขบวนซ้าย/ขวาเพื่อจำลองการเล่น</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: กติกาการเล่น & ถุงโหวตลับ -->
+    <section id="tab-gameplay" class="view-section">
+      <div class="storybook-card">
+        <div class="section-header">
+          <span class="section-eyebrow">🎮 คู่มือกติกา</span>
+          <h2 class="section-title">ขั้นตอนการเล่น &amp; เงื่อนไขแพ้ชนะ</h2>
+          <p class="section-desc">
+            เล่นวนทั้งหมดตามจำนวนผู้เล่น (เช่น 6 คน = 6 รอบ) เพื่อให้ทุกคนได้ผลัดกันเป็นหัวหน้าขบวน
+          </p>
+        </div>
+
+        <div class="gameplay-steps-grid">
+          <!-- 5 Steps List -->
+          <div>
+            <div class="step-card">
+              <div class="step-card-head">
+                <span class="step-tag">ขั้นที่ 1</span>
+                <h3>เลือกผู้ร่วมขบวน</h3>
+              </div>
+              <ul>
+                <li>หัวหน้าขบวนเลือกผู้เล่น <strong>อย่างน้อย 3 คน</strong> เข้าร่วมขบวนแห่ในรอบนั้น</li>
+                <li>ผู้เล่นที่ได้รับเลือกแอบหยิบเหรียญ <strong>1 เหรียญ</strong> จากถุงตนเองใส่ลงใน <strong>ถุงส่วนกลาง</strong></li>
+              </ul>
+            </div>
+
+            <div class="step-card">
+              <div class="step-card-head">
+                <span class="step-tag">ขั้นที่ 2</span>
+                <h3>ตรวจนับเหรียญ</h3>
+              </div>
+              <ul>
+                <li>หัวหน้าขบวนเทเหรียญจากถุงส่วนกลางออกมาเปิดเผยต่อหน้าทุกคน</li>
+                <li>สรุปผลคะแนนเหรียญ ฝ่ายที่มีเหรียญมากกว่าจะเป็นผู้กำหนดทิศทางเดินขบวน (ซ้าย หรือ ขวา)</li>
+              </ul>
+            </div>
+
+            <div class="step-card">
+              <div class="step-card-head">
+                <span class="step-tag">ขั้นที่ 3</span>
+                <h3>เคลื่อนขบวนแห่</h3>
+              </div>
+              <ul>
+                <li>เคลื่อนเสลี่ยงไปยังหมู่บ้านถัดไปตามทิศทางที่สรุปได้</li>
+                <li>ขบวนแห่ช่วยฟื้นฟูภัยแล้ง ผู้เล่นจึงควรปรึกษากันเพื่อมุ่งหน้าไปยังหมู่บ้านที่กำลังวิกฤต</li>
+              </ul>
+            </div>
+
+            <div class="step-card">
+              <div class="step-card-head">
+                <span class="step-tag">ขั้นที่ 4</span>
+                <h3>ปรับสถานะหมู่บ้าน</h3>
+              </div>
+              <ul>
+                <li><strong>หมู่บ้านที่ได้รับการแห่:</strong> ฟื้นฟูขึ้น <strong>+1 ระดับ</strong> (เช่น เหลือง → เขียว)</li>
+                <li><strong>หมู่บ้านที่ไม่ได้รับการแห่:</strong> ภัยแล้งลุกลาม <strong>-1 ระดับ</strong> (เช่น เขียว → เหลือง, เหลือง → แดง)</li>
+                <li><strong>หากอยู่ที่เดิมซ้ำ (รอบที่ 2 เป็นต้นไป):</strong> สถานะลดลง <strong>-1 ระดับ</strong></li>
+              </ul>
+            </div>
+
+            <div class="step-card">
+              <div class="step-card-head">
+                <span class="step-tag">ขั้นที่ 5</span>
+                <h3>ส่งต่อตำแหน่งหัวหน้า</h3>
+              </div>
+              <ul>
+                <li>ส่งมอบตำแหน่งหัวหน้าขบวนให้ผู้เล่นคนถัดไปตามเข็มนาฬิกา</li>
+                <li>เริ่มรอบใหม่ทำตามขั้นที่ 1–4 จนกว่าจะเล่นครบรอบหรือเข้าเงื่อนไขจบเกม</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Bag Voting Mini Simulator -->
+          <div class="bag-sim-card">
+            <span class="section-eyebrow">👝 จำลองขั้นที่ 1–2</span>
+            <h3 style="font-size:1.3rem; color:var(--thai-navy); margin-bottom:6px;">
+              จำลองการโหวตด้วยถุงส่วนกลาง
+            </h3>
+            <p style="font-size:0.9rem; color:var(--ink-brown);">
+              ให้ผู้ร่วมขบวนแอบหย่อนเหรียญลงถุง แล้วกดเปิดนับคะแนนเพื่อสรุปทิศทาง
+            </p>
+
+            <div id="bagVisualWrap" class="bag-visual-wrap">
+              <img src="assets/elements/item_bag_center.png" class="bag-img" alt="ถุงส่วนกลาง">
+            </div>
+
+            <div id="bagCountBadge" style="font-family:'Mali'; font-weight:700; color:var(--thai-red); margin-bottom:8px;">
+              เหรียญในถุงกลาง: 0 เหรียญ
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+              <button class="btn-move-left" onclick="addCoinToBag('purple')">
+                + เหรียญซ้าย (ม่วง)
+              </button>
+              <button class="btn-move-right" onclick="addCoinToBag('pink')">
+                + เหรียญขวา (ชมพู)
+              </button>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:center;">
+              <button class="btn-primary" style="flex:1; justify-content:center;" onclick="revealBagCoins()">
+                🔍 เปิดถุงนับเหรียญ
+              </button>
+              <button class="ctrl-btn" onclick="clearBagCoins()">
+                ล้างถุง
+              </button>
+            </div>
+
+            <div id="bagCoinsTray" class="bag-coins-tray"></div>
+
+            <div id="bagResultText" style="background:#FFF; border:2px solid #3A2214; border-radius:12px; padding:12px; font-size:0.92rem; line-height:1.5;">
+              เลือกใส่เหรียญซ้าย (ม่วง) หรือขวา (ชมพู) อย่างน้อย 3 เหรียญเพื่อจำลองมติโหวต
+            </div>
+          </div>
+        </div>
+
+        <!-- เงื่อนไขจบเกม -->
+        <h3 style="font-size:1.45rem; color:var(--thai-navy); text-align:center; margin-top:28px;">
+          🏆 เงื่อนไขการตัดสินผู้ชนะ
+        </h3>
+        <div class="endgame-grid">
+          <div class="endgame-card catslave-win">
+            <img src="assets/elements/item_card_catslave.png" alt="ทาสแมวชนะ">
+            <div>
+              <h4 style="font-family:'Mali'; font-size:1.25rem; color:var(--thai-red); margin-bottom:6px;">
+                🐾 ฝ่ายทาสแมวชนะ เมื่อ:
+              </h4>
+              <p style="font-size:0.95rem; line-height:1.6; color:var(--ink-dark);">
+                • เล่นครบทุกรอบแล้ว ยังมีหมู่บ้านแล้ง (แดง) <strong>ตั้งแต่ 3 แห่งขึ้นไป</strong><br>
+                • หรือหมู่บ้านติดสถานะแล้ง (แดง) <strong>ครบทั้ง 8 แห่งทันที</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="endgame-card villager-win">
+            <img src="assets/elements/item_card_villager.png" alt="ชาวบ้านชนะ">
+            <div>
+              <h4 style="font-family:'Mali'; font-size:1.25rem; color:var(--status-green); margin-bottom:6px;">
+                🌾 ฝ่ายชาวบ้านชนะ เมื่อ:
+              </h4>
+              <p style="font-size:0.95rem; line-height:1.6; color:var(--ink-dark);">
+                • เล่นครบทุกรอบแล้ว คุมภัยแล้งสำเร็จ โดยเหลือหมู่บ้านแล้ง (แดง) <strong>ไม่ถึง 3 แห่ง</strong> (0, 1 หรือ 2 แห่งเท่านั้น)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: คณะผู้จัดทำ -->
+    <section id="tab-credits" class="view-section">
+      <div class="storybook-card">
+        <div class="credits-course-banner">
+          <span class="section-eyebrow">🎓 ผลงานสร้างสรรค์เพื่อการศึกษา</span>
+          <h2 style="font-size:2.1rem; color:var(--thai-red); margin:6px 0;">“เมี้ยวไม่อยากแห่”</h2>
+          <div style="font-family:'Mali'; font-size:1.2rem; font-weight:700; color:var(--thai-navy);">
+            วิชา Creative Media for Education | รหัสวิชา 468302
+          </div>
+        </div>
+
+        <h3 style="text-align:center; font-size:1.4rem; color:var(--thai-navy); margin-bottom:18px;">
+          ✨ คณะผู้จัดทำ
+        </h3>
+
+        <div class="team-grid">
+          <div class="member-card">
+            <div class="member-avatar" style="background:#E11D48;">1</div>
+            <div class="member-info">
+              <h4>นางสาวอาภัสรา แย้มชุมพร</h4>
+              <span class="member-id">670610445</span>
+              <span class="member-sec">ภาคปกติ</span>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-avatar" style="background:#D97706;">2</div>
+            <div class="member-info">
+              <h4>นางสาวตัสนีม หะเก็ง</h4>
+              <span class="member-id">670610782</span>
+              <span class="member-sec">ภาคปกติ</span>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-avatar" style="background:#7C3AED;">3</div>
+            <div class="member-info">
+              <h4>นางสาวกุลธิดา ศรีนัครินทร์</h4>
+              <span class="member-id">670610447</span>
+              <span class="member-sec">ภาคพิเศษ</span>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-avatar" style="background:#DB2777;">4</div>
+            <div class="member-info">
+              <h4>นางสาวจิรัชญา ภมรพล</h4>
+              <span class="member-id">670610449</span>
+              <span class="member-sec">ภาคพิเศษ</span>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-avatar" style="background:#2563EB;">5</div>
+            <div class="member-info">
+              <h4>นางสาวฉัฐวีณ์ เลิศเบญจศักดิ์</h4>
+              <span class="member-id">670610450</span>
+              <span class="member-sec">ภาคพิเศษ</span>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-avatar" style="background:#059669;">6</div>
+            <div class="member-info">
+              <h4>นายธนพล กิจบำรุง</h4>
+              <span class="member-id">670610452</span>
+              <span class="member-sec">ภาคพิเศษ</span>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-avatar" style="background:#9333EA;">7</div>
+            <div class="member-info">
+              <h4>นางสาวพัณณิตา แหยมดอนไพร</h4>
+              <span class="member-id">670610457</span>
+              <span class="member-sec">ภาคพิเศษ</span>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-avatar" style="background:#0284C7;">8</div>
+            <div class="member-info">
+              <h4>นางสาวภัณฑิรา งามพร้อม</h4>
+              <span class="member-id">670610458</span>
+              <span class="member-sec">ภาคพิเศษ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="advisor-box">
+          <div style="font-family:'Mali'; font-size:1rem; font-weight:700; color:var(--thai-navy); margin-bottom:4px;">
+            🙏 อาจารย์ที่ปรึกษา
+          </div>
+          <div style="font-family:'Mali'; font-size:1.3rem; font-weight:700; color:var(--ink-dark);">
+            รองศาสตราจารย์ ดร.ศิวนิต อรรถวุฒิกุล
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       MODE 1: 3D INTERACTIVE FLIPBOOK VIEW
+       ========================================================= -->
+  <section id="flipbookMainContainer" class="app-container" style="display:none;">
+    <div class="flipbook-stage">
+      <div class="flipbook-toolbar">
+        <button class="ctrl-btn" onclick="changeSpread(-1)">⬅️ หน้าก่อนหน้า</button>
+        <span id="spreadIndicatorText" style="font-family:'Mali'; font-weight:700; color:var(--thai-navy); padding:0 10px;">
+          คู่หน้าที่ 1 / 5 (หน้า 1–2)
+        </span>
+        <button class="ctrl-btn" onclick="changeSpread(1)">หน้าถัดไป ➡️</button>
+        <button class="btn-primary" style="padding:7px 16px; font-size:0.86rem;" onclick="switchTopMode('interactive')">
+          ✨ กลับโต๊ะจำลองเกม
+        </button>
+      </div>
+
+      <div class="book-viewport">
+        <div class="book-spread">
+          <div class="book-page-slot left-page" onclick="zoomBookPage('left')" title="แตะเพื่อดูภาพขยาย">
+            <img id="bookLeftImg" src="assets/pages/page_01.jpg" alt="หน้าซ้าย">
+            <div id="bookLeftRibbon" class="page-num-ribbon">หน้า 1 / 10</div>
+          </div>
+          <div class="book-spine"></div>
+          <div class="book-page-slot right-page" onclick="zoomBookPage('right')" title="แตะเพื่อดูภาพขยาย">
+            <img id="bookRightImg" src="assets/pages/page_02.jpg" alt="หน้าขวา">
+            <div id="bookRightRibbon" class="page-num-ribbon">หน้า 2 / 10</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Jump Thumbnails -->
+      <div class="page-thumbnails-strip">
+        <button class="page-thumb-btn active" data-page="1" onclick="jumpToPage(1)"><img src="assets/pages/page_01.jpg" alt="1"><span>1</span></button>
+        <button class="page-thumb-btn active" data-page="2" onclick="jumpToPage(2)"><img src="assets/pages/page_02.jpg" alt="2"><span>2</span></button>
+        <button class="page-thumb-btn" data-page="3" onclick="jumpToPage(3)"><img src="assets/pages/page_03.jpg" alt="3"><span>3</span></button>
+        <button class="page-thumb-btn" data-page="4" onclick="jumpToPage(4)"><img src="assets/pages/page_04.jpg" alt="4"><span>4</span></button>
+        <button class="page-thumb-btn" data-page="5" onclick="jumpToPage(5)"><img src="assets/pages/page_05.jpg" alt="5"><span>5</span></button>
+        <button class="page-thumb-btn" data-page="6" onclick="jumpToPage(6)"><img src="assets/pages/page_06.jpg" alt="6"><span>6</span></button>
+        <button class="page-thumb-btn" data-page="7" onclick="jumpToPage(7)"><img src="assets/pages/page_07.jpg" alt="7"><span>7</span></button>
+        <button class="page-thumb-btn" data-page="8" onclick="jumpToPage(8)"><img src="assets/pages/page_08.jpg" alt="8"><span>8</span></button>
+        <button class="page-thumb-btn" data-page="9" onclick="jumpToPage(9)"><img src="assets/pages/page_09.jpg" alt="9"><span>9</span></button>
+        <button class="page-thumb-btn" data-page="10" onclick="jumpToPage(10)"><img src="assets/pages/page_10.jpg" alt="10"><span>10</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Inspector -->
+  <div id="componentModal" class="modal-backdrop" onclick="closeComponentModal(event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeComponentModal(event)">✕</button>
+      <div class="modal-img-stage">
+        <img id="modalImg" src="" alt="อุปกรณ์">
+      </div>
+      <span id="modalQty" class="comp-qty-badge" style="font-size:0.9rem; padding:4px 14px;"></span>
+      <h3 id="modalTitle" style="font-size:1.5rem; color:var(--thai-red); margin:8px 0;"></h3>
+      <p id="modalDesc" style="font-size:0.96rem; line-height:1.6; color:var(--ink-brown); margin-bottom:12px;"></p>
+      <div id="modalUsage" class="lore-highlight-box" style="text-align:left;"></div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar (Phone-First UX) -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <button class="mb-nav-btn active" data-tab="lore" onclick="switchTab('lore')">
+      <span class="mb-icon">🏠</span>
+      <span class="mb-lbl">บทนำ</span>
+    </button>
+    <button class="mb-nav-btn" data-tab="components" onclick="switchTab('components')">
+      <span class="mb-icon">🎒</span>
+      <span class="mb-lbl">อุปกรณ์</span>
+    </button>
+    <button class="mb-nav-btn" data-tab="setup" onclick="switchTab('setup')">
+      <span class="mb-icon">⚖️</span>
+      <span class="mb-lbl">เตรียมเกม</span>
+    </button>
+    <button class="mb-nav-btn" data-tab="simulator" onclick="switchTab('simulator')">
+      <span class="mb-icon">🎡</span>
+      <span class="mb-lbl">กระดาน</span>
+    </button>
+    <button class="mb-nav-btn" data-tab="gameplay" onclick="switchTab('gameplay')">
+      <span class="mb-icon">🎮</span>
+      <span class="mb-lbl">วิธีเล่น</span>
+    </button>
+    <button class="mb-nav-btn" data-mode="flipbook" onclick="switchTopMode('flipbook')">
+      <span class="mb-icon">📖</span>
+      <span class="mb-lbl">คู่มือ 3D</span>
+    </button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
