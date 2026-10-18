@@ -82,6 +82,36 @@ html, body {
   background: var(--bg-sky-top);
   overflow-x: hidden;
   transition: background-color 0.4s ease, color 0.4s ease;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+/* Disable double-tap zoom & remove tap delay for rapid repeated tapping */
+button,
+a,
+input,
+select,
+.ctrl-btn,
+.btn-primary,
+.btn-secondary,
+.mb-nav-btn,
+.mode-pill,
+.ebook-nav-arrow,
+.ebook-thumb-btn,
+.coin-chip,
+.spinner-plate,
+.village-node,
+.ebook-page-item,
+.action-btn,
+.filter-chip,
+.step-card,
+.player-count-pill,
+.stepper-btn {
+  touch-action: manipulation !important;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Atmospheric Village Background */
@@ -2223,7 +2253,7 @@ body.rain-mode .lore-highlight-box {
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(64px + env(safe-area-inset-bottom, 0px));
+  height: calc(60px + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
   background: rgba(255, 252, 242, 0.96);
   backdrop-filter: blur(16px);
@@ -2232,30 +2262,35 @@ body.rain-mode .lore-highlight-box {
   box-shadow: 0 -4px 16px rgba(44, 26, 17, 0.12);
   justify-content: space-around;
   align-items: center;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .mb-nav-btn {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 1px;
   background: none;
   border: none;
-  padding: 6px 2px;
+  padding: 4px 1px;
   cursor: pointer;
   color: var(--ink-muted);
   font-family: 'Mali', sans-serif;
   font-weight: 600;
   transition: transform 0.15s ease, color 0.15s ease;
-  min-height: 48px;
+  min-height: 46px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mb-nav-btn .mb-icon {
-  font-size: 1.25rem;
-  width: 32px;
-  height: 32px;
+  font-size: 1.15rem;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -2264,8 +2299,9 @@ body.rain-mode .lore-highlight-box {
 }
 
 .mb-nav-btn .mb-lbl {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .mb-nav-btn.active {

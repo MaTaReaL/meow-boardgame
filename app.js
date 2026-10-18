@@ -245,6 +245,10 @@ function switchTab(tabId) {
   document.querySelectorAll('.mb-nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
   });
+  const btnCreditsTop = document.getElementById('btnCreditsTop');
+  if (btnCreditsTop) {
+    btnCreditsTop.classList.toggle('active', tabId === 'credits');
+  }
   document.querySelectorAll('.view-section').forEach(sec => {
     sec.classList.toggle('active', sec.id === `tab-${tabId}`);
   });
@@ -912,4 +916,19 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     if (e.key === 'Escape') closeComponentModal();
   });
+
+  // Prevent double-tap to zoom on buttons & interactive elements so players can tap rapidly
+  let lastTapTime = 0;
+  document.addEventListener('touchend', (e) => {
+    const currentTime = Date.now();
+    const tapInterval = currentTime - lastTapTime;
+    if (tapInterval < 320 && tapInterval > 0) {
+      const targetInteractive = e.target.closest('button, .ctrl-btn, .mb-nav-btn, .coin-chip, .spinner-plate, .village-node, .ebook-nav-arrow, .ebook-thumb-btn, .filter-chip, .stepper-btn, .player-count-pill, .btn-primary, .btn-secondary');
+      if (targetInteractive) {
+        e.preventDefault();
+        targetInteractive.click();
+      }
+    }
+    lastTapTime = currentTime;
+  }, { passive: false });
 });

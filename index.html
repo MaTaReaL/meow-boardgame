@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#9AD9EA" id="metaThemeColor">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,6 +27,10 @@
       </div>
 
       <div class="header-action-btns">
+        <button id="btnCreditsTop" class="ctrl-btn" onclick="switchTab('credits')" title="คณะผู้จัดทำ & ลิขสิทธิ์">
+          <span class="lbl-desktop">🎓 ผู้จัดทำ</span>
+          <span class="lbl-mobile">🎓</span>
+        </button>
         <button id="btnWeatherToggle" class="ctrl-btn" onclick="toggleWeatherMode()" title="สลับโหมดสว่าง/โหมดมืด">
           <span class="lbl-desktop">☀️ กลางวัน (โหมดสว่าง)</span>
           <span class="lbl-mobile">☀️ สว่าง</span>
@@ -123,6 +127,9 @@
             </button>
             <button class="btn-secondary" onclick="openShareQrModal()">
               📱 สแกน QR ชวนเพื่อนเล่น
+            </button>
+            <button class="btn-secondary" onclick="switchTab('credits')">
+              🎓 คณะผู้จัดทำ &amp; ลิขสิทธิ์
             </button>
           </div>
         </div>
@@ -840,6 +847,10 @@
     <button class="mb-nav-btn" data-mode="flipbook" onclick="switchTopMode('flipbook')">
       <span class="mb-icon">📖</span>
       <span class="mb-lbl">คู่มือ</span>
+    </button>
+    <button class="mb-nav-btn" data-tab="credits" onclick="switchTab('credits')">
+      <span class="mb-icon">🎓</span>
+      <span class="mb-lbl">เครดิต</span>
     </button>
   </nav>
 
