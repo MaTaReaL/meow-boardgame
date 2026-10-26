@@ -220,6 +220,8 @@ function switchTopMode(mode) {
   if (mainFlipbook) mainFlipbook.style.display = mode === 'flipbook' ? 'block' : 'none';
 
   if (mode === 'flipbook') {
+    const v = document.getElementById('tutorialVideo');
+    if (v && !v.paused) v.pause();
     renderEbookPage();
   }
 
@@ -238,6 +240,10 @@ function switchTab(tabId) {
   if (currentTopMode !== 'interactive') {
     switchTopMode('interactive');
   }
+  if (tabId !== 'lore') {
+    const v = document.getElementById('tutorialVideo');
+    if (v && !v.paused) v.pause();
+  }
   sfx.playTick(600, 0.05);
   document.querySelectorAll('.nav-tab').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
@@ -253,6 +259,39 @@ function switchTab(tabId) {
     sec.classList.toggle('active', sec.id === `tab-${tabId}`);
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// =========================================================
+// TUTORIAL VIDEO CONTROLS & NAVIGATION
+// =========================================================
+function playTutorialVideo() {
+  const v = document.getElementById('tutorialVideo');
+  const overlay = document.getElementById('videoOverlayPlay');
+  if (!v) return;
+  sfx.playTick(500, 0.05);
+  if (v.paused) {
+    v.play().then(() => {
+      if (overlay) overlay.classList.add('hidden');
+    }).catch(e => {
+      console.log('Video play error:', e);
+    });
+  } else {
+    v.pause();
+    if (overlay) overlay.classList.remove('hidden');
+  }
+}
+
+function scrollToTutorialVideo() {
+  if (currentTopMode !== 'interactive') {
+    switchTopMode('interactive');
+  }
+  switchTab('lore');
+  setTimeout(() => {
+    const el = document.getElementById('tutorialVideoSection');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 120);
 }
 
 // =========================================================
@@ -907,6 +946,21 @@ window.addEventListener('DOMContentLoaded', () => {
   initEbookReader();
   initParticles();
   animateParticles();
+
+  // Tutorial Video Event Listeners
+  const tutorialVideo = document.getElementById('tutorialVideo');
+  const videoOverlay = document.getElementById('videoOverlayPlay');
+  if (tutorialVideo) {
+    tutorialVideo.addEventListener('play', () => {
+      if (videoOverlay) videoOverlay.classList.add('hidden');
+    });
+    tutorialVideo.addEventListener('pause', () => {
+      if (videoOverlay) videoOverlay.classList.remove('hidden');
+    });
+    tutorialVideo.addEventListener('ended', () => {
+      if (videoOverlay) videoOverlay.classList.remove('hidden');
+    });
+  }
 
   // Keyboard navigation for E-Book Manual Reader
   window.addEventListener('keydown', (e) => {

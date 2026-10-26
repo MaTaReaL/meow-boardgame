@@ -83,6 +83,64 @@
 
     <!-- TAB 1: บทนำ & ประวัติแห่นางแมว -->
     <section id="tab-lore" class="view-section active">
+
+      <!-- ==========================================
+           FEATURED VIDEO TUTORIAL (วิดีโอแนะนำวิธีเล่น)
+           ========================================== -->
+      <div class="video-tutorial-card" id="tutorialVideoSection">
+        <div class="video-card-top-bar">
+          <div class="video-badge-pill">
+            <span class="pulse-indicator"></span>
+            <span>🎬 วิดีโอแนะนำวิธีเล่น (3 นาทีจบ)</span>
+          </div>
+          <div class="video-badge-right">
+            <span>🔊 เสียงพูดคมชัด • ซับไตเติลไทย</span>
+          </div>
+        </div>
+
+        <div class="video-player-frame">
+          <video id="tutorialVideo"
+                 controls
+                 playsinline
+                 preload="metadata"
+                 poster="assets/tutorial_poster.jpg">
+            <source src="assets/tutorial_video.mp4" type="video/mp4">
+            เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ HTML5
+          </video>
+          
+          <div id="videoOverlayPlay" class="video-overlay-play" onclick="playTutorialVideo()">
+            <button class="big-play-btn" type="button" aria-label="แตะเพื่อเล่นวิดีโอ">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                <polygon points="8,5 19,12 8,19"></polygon>
+              </svg>
+            </button>
+            <div class="play-overlay-text">
+              <div class="play-title">แตะเพื่อเล่นคลิปแนะนำวิธีเล่น</div>
+              <div class="play-sub">ความยาว 3:32 นาที • สาธิตกติกาและอุปกรณ์จริงครบถ้วน</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-feature-pills">
+          <div class="v-pill">
+            <span class="v-icon">⚡</span>
+            <span>กระชับ เข้าใจง่าย 3 นาทีจบ</span>
+          </div>
+          <div class="v-pill">
+            <span class="v-icon">💬</span>
+            <span>มีซับไตเติลเคลื่อนไหวตามคำพูด</span>
+          </div>
+          <div class="v-pill">
+            <span class="v-icon">🎒</span>
+            <span>สาธิตอุปกรณ์จริง &amp; กลไกการแห่</span>
+          </div>
+          <div class="v-pill">
+            <span class="v-icon">⚖️</span>
+            <span>กติกาชนะ 3 แดง vs 3 เขียว</span>
+          </div>
+        </div>
+      </div>
+
       <div class="hero-banner">
         <div class="hero-cover-wrap" onclick="switchTopMode('flipbook')" title="แตะเพื่อเปิดอ่านคู่มือ">
           <img src="assets/elements/cover_main.png" alt="ปก เมี้ยวไม่อยากแห่">
@@ -116,6 +174,9 @@
           </div>
 
           <div class="hero-cta-row">
+            <button class="btn-primary highlight-video-btn" onclick="scrollToTutorialVideo()">
+              🎬 ชมคลิปสอนเล่น (3 นาที)
+            </button>
             <button class="btn-primary" onclick="switchTab('simulator')">
               🎡 ทดลองเล่นบอร์ดเกม
             </button>
@@ -463,6 +524,16 @@
 
     <!-- TAB 5: กติกาการเล่น & ถุงโหวตลับ -->
     <section id="tab-gameplay" class="view-section">
+
+      <div class="video-quick-banner" onclick="scrollToTutorialVideo()">
+        <span class="vq-icon">🎬</span>
+        <div class="vq-text">
+          <strong>ต้องการดูคลิปตัวอย่างการเล่นจริง?</strong>
+          <span>คลิกที่นี่เพื่อชมวิดีโอสาธิตวิธีเล่น 3 นาที (มีภาพโต๊ะ การหยิบเหรียญ และกลไกจริง)</span>
+        </div>
+        <button class="vq-btn" type="button">ชมคลิป ↗</button>
+      </div>
+
       <div class="storybook-card">
         <div class="section-header">
           <span class="section-eyebrow">🎮 คู่มือกติกา</span>

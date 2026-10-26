@@ -651,6 +651,283 @@ h1, h2, h3, .font-display {
 }
 
 /* ==========================================
+   FEATURED VIDEO TUTORIAL (วิดีโอแนะนำวิธีเล่น)
+   ========================================== */
+.video-tutorial-card {
+  background: var(--paper-cream);
+  border: 3px solid #3A2214;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sketch);
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.rain-mode .video-tutorial-card {
+  background: var(--card-bg);
+  border: var(--border-sketch);
+}
+
+.video-card-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.video-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFE8CC;
+  border: 2px solid #3A2214;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: 'Mali', cursive;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--thai-red);
+}
+
+body.rain-mode .video-badge-pill {
+  background: #2C183E;
+  border-color: #475569;
+  color: #F472B6;
+}
+
+.pulse-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--thai-red);
+  box-shadow: 0 0 0 rgba(200, 29, 37, 0.5);
+  animation: pulseDot 1.8s infinite;
+}
+
+@keyframes pulseDot {
+  0% { box-shadow: 0 0 0 0 rgba(200, 29, 37, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(200, 29, 37, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(200, 29, 37, 0); }
+}
+
+.video-badge-right {
+  font-family: 'Mali', cursive;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.video-player-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0D0805;
+  border: 3px solid #3A2214;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 0 #3A2214;
+}
+
+body.rain-mode .video-player-frame {
+  border-color: #334155;
+  box-shadow: 0 6px 0 #05080E;
+}
+
+.video-player-frame video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Custom Play Overlay */
+.video-overlay-play {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 10, 6, 0.42);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 10;
+  padding: 16px;
+  text-align: center;
+}
+
+.video-overlay-play.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.big-play-btn {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFDD57 0%, #E6A817 100%);
+  border: 3px solid #3A2214;
+  color: #3A2214;
+  box-shadow: 0 6px 0 #3A2214, 0 10px 24px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  margin-bottom: 14px;
+}
+
+.big-play-btn svg {
+  margin-left: 4px;
+}
+
+.video-overlay-play:hover .big-play-btn {
+  transform: scale(1.12);
+  box-shadow: 0 8px 0 #3A2214, 0 14px 28px rgba(0,0,0,0.5);
+}
+
+.video-overlay-play:active .big-play-btn {
+  transform: scale(0.96);
+  box-shadow: 0 2px 0 #3A2214;
+}
+
+.play-overlay-text {
+  color: #FFF;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+.play-title {
+  font-family: 'Mali', cursive;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.play-sub {
+  font-size: 0.9rem;
+  opacity: 0.95;
+}
+
+/* Feature Pills below video */
+.video-feature-pills {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.v-pill {
+  background: var(--paper-warm);
+  border: 2px solid #3A2214;
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Mali', cursive;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ink-dark);
+}
+
+body.rain-mode .v-pill {
+  background: var(--paper-parchment);
+  border-color: #334155;
+  color: var(--ink-dark);
+}
+
+.v-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+/* Video quick banner for gameplay tab */
+.video-quick-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFE8CC 100%);
+  border: 2.5px solid #3A2214;
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 0 #3A2214;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.video-quick-banner:hover {
+  transform: translateY(-2px);
+  background: #FFF3D1;
+}
+
+body.rain-mode .video-quick-banner {
+  background: #1A2840;
+  border-color: #334155;
+  box-shadow: 0 4px 0 #05080E;
+}
+
+.vq-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.vq-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.vq-text strong {
+  font-family: 'Mali', cursive;
+  font-size: 1rem;
+  color: var(--thai-red);
+}
+
+body.rain-mode .vq-text strong {
+  color: #F472B6;
+}
+
+.vq-text span {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+}
+
+.vq-btn {
+  background: var(--thai-red);
+  color: #FFF;
+  border: 2px solid #3A2214;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: 'Mali', cursive;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 0 #3A2214;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary.highlight-video-btn {
+  background: linear-gradient(135deg, #E6A817 0%, #C81D25 100%);
+  color: #FFF;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  animation: gentlePulse 2.5s infinite ease-in-out;
+}
+
+@keyframes gentlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* ==========================================
    TAB 2: COMPONENT EXPLORER (อุปกรณ์ภายในกล่อง)
    ========================================== */
 .component-filter-bar {
@@ -2352,10 +2629,50 @@ body.rain-mode .mb-nav-btn.active .mb-icon {
   .calc-results-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .video-feature-pills {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Mobile Screens (Phone First UX) */
 @media (max-width: 768px) {
+  .video-tutorial-card {
+    padding: 14px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+  }
+  .video-card-top-bar {
+    margin-bottom: 12px;
+  }
+  .video-badge-pill {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+  }
+  .big-play-btn {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+  }
+  .big-play-btn svg {
+    width: 28px;
+    height: 28px;
+  }
+  .play-title {
+    font-size: 1.05rem;
+  }
+  .play-sub {
+    font-size: 0.8rem;
+  }
+  .video-feature-pills {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .v-pill {
+    padding: 7px 10px;
+    font-size: 0.82rem;
+  }
+
   /* Show Mobile Bottom Bar */
   .mobile-bottom-nav {
     display: flex;
